@@ -13,7 +13,7 @@ start_link() -> gen_server:start_link(?MODULE, [], []).
 % gen_server
 
 init([]) ->
-	RunningApplications = [Application || {Application, _, _} <- application:which_applications()],
+	RunningApplications = [Application || {Application, _, _} <- application:loaded_applications()],
 	AppResourceFiles = [code:where_is_file(lists:flatten(io_lib:format("~s.app", [App]))) || App <- RunningApplications],
 	AppProperties = [file:consult(ResourceFile) || ResourceFile <- AppResourceFiles],
 	ActiveModules = lists:usort(lists:flatten([proplists:get_value(modules, Properties) || {ok, [{application, _, Properties}]} <- AppProperties])),
